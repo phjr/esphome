@@ -118,3 +118,10 @@ config/
 tests/build/
 tests/.esphome/
 /.temp-clang-tidy.cpp
+
+
+# local configs
+/*.yaml
+miflora1/
+sprinklerctl/
+sprinklerctlx/
