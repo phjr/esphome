@@ -1187,13 +1187,13 @@ light:
             if (initial_run) {
               it[0] = current_color;
             }
-            
+
     - wled:
         port: 11111
-        
+
     - adalight:
         uart_id: adalight_uart
-        
+
     - automation:
         name: Custom Effect
         sequence:
@@ -1277,6 +1277,8 @@ climate:
     name: Mitsubishi
   - platform: whirlpool
     name: Whirlpool Climate
+  - platform: climate_ir_lg
+    name: LG Climate
 
 switch:
   - platform: gpio
@@ -1463,6 +1465,14 @@ switch:
         id: my_stepper
         position: 0
 
+  - platform: gpio
+    name: "SN74HC595 Pin #0"
+    pin:
+      sn74hc595: sn74hc595_hub
+      # Use pin number 0
+      number: 0
+      inverted: False
+
 fan:
   - platform: binary
     output: gpio_26
@@ -1496,6 +1506,16 @@ interval:
             btn_left_state = ((uint32_t) id(btn_left)->get_value()  +  63 * (uint32_t)btn_left_state) >> 6;
 
             id(btn_left)->set_threshold(btn_left_state * 0.9);
+
+color:
+  - id: kbx_red
+    red: 100%
+    green: 1%
+    blue: 2%
+  - id: kbx_blue
+    red: 0%
+    green: 1%
+    blue: 100%
 
 display:
 - platform: lcd_gpio
@@ -1579,6 +1599,13 @@ display:
   reset_pin: GPIO23
   model: 2.90in
   full_update_every: 30
+  lambda: |-
+    it.rectangle(0, 0, it.get_width(), it.get_height());
+- platform: st7789v
+  cs_pin: GPIO5
+  dc_pin: GPIO16
+  reset_pin: GPIO23
+  backlight_pin: GPIO4
   lambda: |-
     it.rectangle(0, 0, it.get_width(), it.get_height());
 
@@ -1713,3 +1740,11 @@ text_sensor:
     name: "BSSID"
   mac_address:
     name: "Mac Address"
+
+sn74hc595:
+  - id: 'sn74hc595_hub'
+    data_pin: GPIO21
+    clock_pin: GPIO23
+    latch_pin: GPIO22
+    oe_pin: GPIO32
+    sr_count: 2
